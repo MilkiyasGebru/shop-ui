@@ -1,4 +1,5 @@
 import { FaAngleDoubleRight } from "react-icons/fa";
+import Link from "next/link";
 
 export default function ProductExplore() {
     return (
@@ -9,13 +10,13 @@ export default function ProductExplore() {
                 at the right price
             </h1>
             <p>Browse a wide range of auto & autoparts</p>
-            <button
+            <Link href={"/shop"}
                 className=" py-3 px-8 rounded-sm hover:bg-yellow-400 bg-white text-black flex flex-row items-center
       transition delay-150 duration-300 ease-in-out hover:-translate-y-1"
             >
                 Explore Products
                 <FaAngleDoubleRight className="text-xl" />
-            </button>
+            </Link>
         </div>
     );
 }
