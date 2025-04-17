@@ -1,10 +1,10 @@
 import Product from "@/components/Product";
 
-export default function ProductList({products}) {
+export default function ProductList({products, title}) {
     return (
-        <div className="flex gap-6 flex-wrap px-6">
+        <div className="flex gap-2 flex-wrap">
             {products.map((product) => {
-                return <Product key={product._id} product_name={product.product_name} price={product.price}  />
+                return <Product key={product._id + title } product_name={product.product_name} price={product.price}  />
             })}
         </div>
     )

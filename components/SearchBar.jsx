@@ -5,7 +5,7 @@ const menu_names = ["Brake System","Filters","Engine","Body","Suspension","Cooli
 
 export default function SearchBar() {
 
-    const [displayCategoriesMenu, setDisplayCategoriesMenu] = useState(true)
+    const [displayCategoriesMenu, setDisplayCategoriesMenu] = useState(false)
     const categoryRef = useRef(null);
 
     useEffect(() => {
