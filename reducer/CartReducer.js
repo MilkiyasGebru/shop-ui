@@ -6,10 +6,10 @@ export const CartReducer =(state, action) =>{
             const new_cart = new Map(state)
 
             if (!new_cart.get(action.payload.product_name)){
-                new_cart.set(action.payload.product_name,[0,0])
+                new_cart.set(action.payload.product_name,[0,action.payload.price])
             }
 
-            const new_value = [new_cart.get(action.payload.product_name)[0]+1,new_cart.get(action.payload.product_name)[1]+1]
+            const new_value = [new_cart.get(action.payload.product_name)[0]+1,new_cart.get(action.payload.product_name)[1]]
             new_cart.set(action.payload.product_name,new_value)
 
             return new_cart
