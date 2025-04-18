@@ -7,8 +7,7 @@ export default function CheckOut() {
     console.log(context)
     let sub_total = 0
     {Array.from(context.state).map(([key, value]) => {
-        sub_total += value[1]
-        console.log(key, value, "iterator")
+        sub_total += value[0]*value[1]
     })
 
     }
