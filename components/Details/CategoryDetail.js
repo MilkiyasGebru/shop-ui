@@ -1,4 +1,4 @@
-export default function CategoryDetails({ inputType, setCategories,categories }) {
+export default function CategoryDetails({ inputType, setCategories,categories,setCategory }) {
     const Type = inputType || "checkbox";
     const Details = [
         {
@@ -52,12 +52,15 @@ export default function CategoryDetails({ inputType, setCategories,categories })
     ];
 
     const handleChange = (e)=>{
-        const is_found = categories.includes(e.target.id);
-        if (is_found){
+        const is_found = (categories) && categories.includes(e.target.id);
+        if (is_found && Type === "checkbox") {
             setCategories(categories.filter((category) => category !== e.target.id));
         }
-        else {
+        else if (Type === "checkbox") {
             setCategories([...categories, e.target.id]);
+        }
+        else {
+            setCategory(e.target.id);
         }
     }
 

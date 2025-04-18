@@ -1,4 +1,4 @@
-export default function BrandDetails({ inputType, setBrands, brands}) {
+export default function BrandDetails({ inputType, setBrands, brands, setBrand}) {
     const Type = inputType || "checkbox";
     const Details = [
         {
@@ -56,14 +56,16 @@ export default function BrandDetails({ inputType, setBrands, brands}) {
             label: "Lexus",
         },
     ];
-    console.log(brands)
     const handleUpdate = (e)=>{
-        const is_found = brands.includes(e.target.id)
+        const is_found = brands && brands.includes(e.target.id)
         if (is_found){
             setBrands(brands.filter((brand)=>brand !== e.target.id));
         }
-        else{
+        else if (Type === "checkbox") {
             setBrands([...brands, e.target.id]);
+        }
+        else {
+            setBrand(e.target.id)
         }
     }
 
