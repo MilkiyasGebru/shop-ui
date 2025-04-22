@@ -3,6 +3,7 @@ import AddProduct from "@/components/AddProduct";
 import {useAuthContext} from "@/hooks/useAuthContext";
 import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
+import LoadingScreen from "@/components/LoadingScreen";
 
 export default function AddProductPage() {
 
@@ -18,6 +19,7 @@ export default function AddProductPage() {
             console.log("Authentication token in the context is ", auth_context.state.token)
             if (!localStorage.getItem("autoshoppa-token")) {
                 router.push('/login');
+                alert("Create an account to sell product");
             }
             setIsLoading(false);
         };
@@ -26,7 +28,7 @@ export default function AddProductPage() {
     }, [])
 
     if (isLoading) {
-        return <div>The page is loading</div>
+        return <div><LoadingScreen/></div>
     }
 
     return (
