@@ -4,12 +4,15 @@ import { GiGears } from "react-icons/gi";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import {useCartContext} from "@/hooks/useCartContext";
 import Link from "next/link";
+import {useContext} from "react";
+import {AuthContext} from "@/context/AuthContext";
 
 
 
 export default function Navbar() {
 
     const context = useCartContext()
+    const auth_context = useContext(AuthContext)
     return (
         <div className="flex flex-row justify-around  mt-2" id="navbar">
             <div
@@ -34,13 +37,13 @@ export default function Navbar() {
                 >
                     Shop
                 </Link>
-                <a
-                    href=""
+                <Link
+                    href="/checkout"
                     className="hover:text-yellow-400
          transition delay-150 duration-300 ease-in-out hover:-translate-y-1"
                 >
                     Track Order
-                </a>
+                </Link>
                 <Link
                     href="/contact"
                     className="hover:text-yellow-400
@@ -48,17 +51,24 @@ export default function Navbar() {
                 >
                     Contact
                 </Link>
+                <Link
+                    href="/add"
+                    className="hover:text-yellow-400
+         transition delay-150 duration-300 ease-in-out hover:-translate-y-1"
+                >
+                    Add
+                </Link>
             </div>
 
             <div className="flex flex-row gap-6 mt-4">
-                <a
+                <Link
                     href="#"
                     className="hover:text-yellow-400 flex flex-row gap-2
          transition delay-150 duration-300 ease-in-out hover:-translate-y-1"
                 >
                     <IoPersonCircleSharp className="text-2xl" />
                     Login/Register
-                </a>
+                </Link>
                 <a
                     href="#"
                     className="flex flex-row hover:text-yellow-400
