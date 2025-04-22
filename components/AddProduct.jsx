@@ -2,34 +2,67 @@
 import CategoryDetails from "./Details/CategoryDetail";
 import BrandDetails from "./Details/BrandDetail";
 import {useState} from "react";
+import {useAuthContext} from "@/hooks/useAuthContext";
+import {error} from "next/dist/build/output/log";
+import LoadingScreen from "@/components/LoadingScreen";
 
 export default function AddProduct() {
+    const [load, setLoad] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(null);
+    const context = useAuthContext();
     const [product_name, setProductName] = useState("");
     const [price, setPrice] = useState(0);
+    const [year,setYear] = useState(2000);
     const [description, setDescription] = useState("");
     const [brand, setBrand] = useState("");
     const [category, setCategory] = useState("");
     const [selectedFile, setSelectedFile] = useState(null);
-    const[imageview, setImageview] = useState("");
+    const [imageview, setImageview] = useState(null);
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoad(true);
+
+        if(!price || !description || !brand || !category || !selectedFile) {
+           alert("fill all");
+           // return;
+        } else {
+
+        }
         URL.revokeObjectURL(setImageview())
         const formData = new FormData()
         formData.append('product_name', product_name);
         formData.append('price', price);
+        formData.append('year', year);
         formData.append('description', description);
         formData.append('brand', brand);
         formData.append('category', category);
         formData.append('imageview', imageview);
         if (selectedFile) {
             formData.append('photo', selectedFile);
+
         }
 
+        console.log("token is ", context.state.token)
         const post_options = {
             method :"POST",
+            headers:{
+                "Authorization":`Bearer ${localStorage.getItem("autoshoppa-token").slice(1,-1)}`
+            },
             body: formData
         }
-      await fetch("http://localhost:8080/api/products/add", post_options)
+
+      const response = await fetch("http://localhost:8080/api/products/add", post_options)
+        if(response.ok){
+            setLoad(false)
+            setSuccess(true)
+            return response
+        } else {
+            setError(true);
+            setLoad(false);
+
+        }
+
     }
     const handleFileChange = async (e) =>{
         setSelectedFile(e.target.files[0]);
@@ -37,8 +70,72 @@ export default function AddProduct() {
     }
     return (
         <form action="" method="POST" encType={"multipart/form-data"}  onSubmit={handleSubmit}>
-            <div className=" px-8 py-10 flex items-center justify-center">
+            {!load && <div className=" px-8 py-10 flex items-center justify-center">
                 <div className="flex flex-col gap-8">
+
+                    <div className="flex gap-4">
+                        <span className="font-semibold text-xl">Product Name:</span>
+                        <input
+                            type="text"
+                            className="border-1 w-60 px-2 rounded-md border-gray-400"
+                            placeholder="Product Name"
+                            value={product_name}
+                            onChange={(e) => {
+                                setProductName(e.target.value)
+                            }}
+                        />
+                    </div>
+                    <div className="flex flex-row gap-4">
+                        <span className="font-semibold text-xl">Product Price:</span>
+                        <input
+                            type="number"
+                            name=""
+                            id="price"
+                            className="border-1 w-60 px-2 border-gray-400 rounded-md"
+                            placeholder="Price in Birr"
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
+                        />
+                    </div>
+                    <div className="self-center w-full">
+                          <textarea
+                              name=""
+                              id="descrption"
+                              className="border-1 w-[100%] h-32 px-2 rounded-md "
+                              placeholder="Enter Product Descrption"
+                              value={description}
+                              onChange={(e) => {
+                                  setDescription(e.target.value)
+                              }}
+
+                          ></textarea>
+                    </div>
+                    <div className="flex flex-row self-center">
+                        <div className="flex flex-col gap-2">
+                            <span className="text-lg font-semibold">Categories</span>
+                            <CategoryDetails inputType="radio" className="items-center" setCategory={setCategory}/>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                            <span className="text-lg font-semibold">Brands</span>
+                            <BrandDetails inputType="radio" setBrand={setBrand}/>
+                        </div>
+
+                    </div>
+                    <div className="flex flex-row gap-4">
+                        <span className="font-semibold text-xl">Year:</span>
+                        <input
+                            type="number"
+                            name=""
+                            id="Year"
+                            className="border-1 w-60 px-2 border-gray-400 rounded-md"
+                            value={year}
+                            placeholder={2000}
+                            min={2000}
+                            onChange={(e) => setYear(e.target.value)}
+                        />
+
+                    </div>
                     <div className="flex flex-row gap-5">
                         <label
                             className="block text-xl font-semibold text-gray-900 dark:text-white"
@@ -54,64 +151,34 @@ export default function AddProduct() {
                             onChange={handleFileChange}
                         />
                     </div>
-                    <div className="flex gap-4">
-                        <span className="font-semibold text-xl">Product Name:</span>
-                        <input
-                            type="text"
-                            className="border-1 w-60 px-2 rounded-md border-gray-400"
-                            placeholder="Product Name"
-                            value={product_name}
-                            onChange={(e)=>{setProductName(e.target.value)}}
-                        />
+                    <div className="skeleton h-48 w-48 self-center">
+                        <img src={imageview} className="w-full h-full"></img>
                     </div>
-                    <div className="flex flex-row gap-4">
-                        <span className="font-semibold text-xl">Product Price:</span>
-                        <input
-                            type="number"
-                            name=""
-                            id="price"
-                            className="border-1 w-60 px-2 border-gray-400 rounded-md"
-                            placeholder="Price in Birr"
-                            value={price}
-                            onChange={(e)=>setPrice(e.target.value)}
-                        />
-                    </div>
-                    <div className="self-center w-full">
-                          <textarea
-                              name=""
-                              id="descrption"
-                              className="border-1 w-[100%] h-32 px-2 rounded-md "
-                              placeholder="Enter Product Descrption"
-                              value={description}
-                              onChange={(e)=>{setDescription(e.target.value)}}
-
-                          ></textarea>
-                    </div>
-                    <div className="flex flex-row self-center">
-                        <div className="flex flex-col gap-2">
-                            <span className="text-lg font-semibold">Categories</span>
-                            <CategoryDetails inputType="radio" className="items-center" setCategory={setCategory}/>
-                        </div>
-
-                        <div className="flex flex-col gap-2">
-                            <span className="text-lg font-semibold">Brands</span>
-                            <BrandDetails inputType="radio" setBrand={setBrand} />
-                        </div>
-
-                    </div>
-
-                    <img src={imageview}></img>
 
                     <input
                         type="submit"
                         value="Submit"
-                        className="border-1 w-20 rounded-md px-2 py-1 font-semibold border-gray-400 self-center"
+                        className="border-1 w-20 rounded-md px-2 py-1 mt-2
+                        font-semibold border-gray-400 self-center hover:bg-yellow-400"
                         placeholder="Enter your product description"
                         onClick={handleSubmit}
                     />
                 </div>
+            </div>}
+            {load &&
+                <LoadingScreen/>
+            }
+            {error && <div className="toast toast-center">
+                <div className="alert alert-error">
+                    <span>Failed to add product</span>
+                </div>
             </div>
-
+            }
+            {success && <div className="toast toast-center">
+                <div className="alert alert-success">
+                    <span>Product added</span>
+                </div>
+            </div>}
         </form>
     );
 }
