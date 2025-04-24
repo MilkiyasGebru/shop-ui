@@ -31,12 +31,20 @@ export default function Login (){
         const json_response = await response.json()
         setIsLoading(false);
         if (response.ok){
+
+            console.log(" Response is okay and action dispatched")
+            console.log("This is the json response", json_response.token)
+            console.log("This is the context",context)
             context.dispatch({
                 type: "LOGIN",
-                payload: json_response.token,
+                payload: {
+                    token: json_response.token
+                },
             })
             localStorage.setItem("autoshoppa-token", JSON.stringify(json_response.token))
-             router.push("/add")
+            // router.push("/add")
+            console.log("Finished login")
+
         }
         else {
             alert("Login failed.")
